@@ -7,6 +7,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
+// Use the same API base URL as the rest of the app
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+
 export const dynamic = 'force-dynamic';
 
 function LoginForm() {
@@ -27,10 +30,17 @@ function LoginForm() {
         }
     }, [searchParams]);
 
-    const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-
     const handleGoogleAuth = () => {
-        window.location.href = `${API_BASE_URL}/api/auth/google`;
+        // Get the API base URL and ensure it doesn't have duplicate /api
+        let baseUrl = API_BASE_URL.replace(/\/$/, ''); // Remove trailing slash
+        
+        // Remove any trailing /api to avoid double /api/api
+        baseUrl = baseUrl.replace(/\/api\/?$/, '');
+        
+        // Construct Google OAuth URL: baseUrl + /api/auth/google
+        // Example: https://backend-95ve.onrender.com/api/auth/google
+        const googleAuthUrl = `${baseUrl}/api/auth/google`;
+        window.location.href = googleAuthUrl;
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
