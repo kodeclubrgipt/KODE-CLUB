@@ -9,7 +9,7 @@ if (typeof window !== 'undefined') {
   const isProduction = window.location.hostname !== 'localhost' &&
     window.location.hostname !== '127.0.0.1';
 
-  if (isProduction && API_BASE_URL.includes('localhost')) {
+  if (isProduction && API_BASE_URL && API_BASE_URL.includes('localhost')) {
     console.error('❌❌❌ CRITICAL ERROR ❌❌❌');
     console.error('Frontend is trying to use localhost API in production!');
     console.error('');
@@ -37,6 +37,13 @@ export const getGoogleAuthUrl = () => {
   // Get API base URL from environment variable
   let apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
+  if (!apiUrl) {
+    if (typeof window !== 'undefined') {
+      console.error('⚠️ NEXT_PUBLIC_API_URL is not set! Google Auth will fail.');
+    }
+    return '';
+  }
+
   // Remove trailing slash if present
   apiUrl = apiUrl.replace(/\/$/, '');
 
@@ -62,7 +69,7 @@ class ApiClient {
     this.baseURL = baseURL;
     // Log API URL in development or if using localhost
     if (typeof window !== 'undefined') {
-      if (baseURL.includes('localhost') && window.location.hostname !== 'localhost') {
+      if (baseURL && baseURL.includes('localhost') && window.location.hostname !== 'localhost') {
         console.error('⚠️ API Client is using localhost URL in production!');
         console.error('Current API URL:', baseURL);
         console.error('Please set NEXT_PUBLIC_API_URL=https://backend-95ve.onrender.com/api in Vercel');
