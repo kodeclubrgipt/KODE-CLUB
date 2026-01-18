@@ -2,13 +2,13 @@
 // IMPORTANT: In production (Vercel), you MUST set NEXT_PUBLIC_API_URL
 // Example: https://backend-95ve.onrender.com/api
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // Runtime check and warning (only in browser)
 if (typeof window !== 'undefined') {
-  const isProduction = window.location.hostname !== 'localhost' && 
-                       window.location.hostname !== '127.0.0.1';
-  
+  const isProduction = window.location.hostname !== 'localhost' &&
+    window.location.hostname !== '127.0.0.1';
+
   if (isProduction && API_BASE_URL.includes('localhost')) {
     console.error('❌❌❌ CRITICAL ERROR ❌❌❌');
     console.error('Frontend is trying to use localhost API in production!');
@@ -35,23 +35,23 @@ if (typeof window !== 'undefined') {
 // Helper function to get Google OAuth URL
 export const getGoogleAuthUrl = () => {
   // Get API base URL from environment variable
-  let apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
-  
+  let apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
   // Remove trailing slash if present
   apiUrl = apiUrl.replace(/\/$/, '');
-  
+
   // Remove /api suffix if present (to avoid double /api/api)
   // This handles cases where NEXT_PUBLIC_API_URL already includes /api
   let baseUrl = apiUrl.replace(/\/api$/, '');
-  
+
   // If we're in production and no env var is set, log warning
-  if (typeof window !== 'undefined' && 
-      window.location.hostname !== 'localhost' && 
-      window.location.hostname !== '127.0.0.1' &&
-      !process.env.NEXT_PUBLIC_API_URL) {
+  if (typeof window !== 'undefined' &&
+    window.location.hostname !== 'localhost' &&
+    window.location.hostname !== '127.0.0.1' &&
+    !process.env.NEXT_PUBLIC_API_URL) {
     console.error('⚠️ NEXT_PUBLIC_API_URL is not set! Please configure it in Vercel environment variables.');
   }
-  
+
   // Construct Google OAuth URL: baseUrl + /api/auth/google
   // Example: https://backend-95ve.onrender.com/api/auth/google
   return `${baseUrl}/api/auth/google`;
@@ -74,7 +74,7 @@ class ApiClient {
 
   async request(endpoint, options = {}) {
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-    
+
     const headers = {
       'Content-Type': 'application/json',
       ...(options.headers || {}),
@@ -87,7 +87,7 @@ class ApiClient {
     try {
       const fullUrl = `${this.baseURL}${endpoint}`;
       console.log(`API Request: ${options.method || 'GET'} ${fullUrl}`);
-      
+
       const response = await fetch(fullUrl, {
         ...options,
         headers,
@@ -98,7 +98,7 @@ class ApiClient {
       // Check if response is JSON
       const contentType = response.headers.get('content-type');
       let data;
-      
+
       if (contentType && contentType.includes('application/json')) {
         data = await response.json();
       } else {
