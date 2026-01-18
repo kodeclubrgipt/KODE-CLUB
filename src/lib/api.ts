@@ -1,7 +1,27 @@
 // Get API base URL from environment variable
 // IMPORTANT: In production (Vercel), you MUST set NEXT_PUBLIC_API_URL
 // Example: https://backend-95ve.onrender.com/api
+
+// Debug: Log environment variable (only in browser)
+if (typeof window !== 'undefined') {
+  console.log('🔍 Environment check:');
+  console.log('  NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL || 'NOT SET');
+  console.log('  Window location:', window.location.href);
+}
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+
+// Warn if using localhost in production
+if (typeof window !== 'undefined' && 
+    window.location.hostname !== 'localhost' && 
+    window.location.hostname !== '127.0.0.1' &&
+    API_BASE_URL.includes('localhost')) {
+  console.error('❌ CRITICAL: Using localhost API URL in production!');
+  console.error('   Current API URL:', API_BASE_URL);
+  console.error('   NEXT_PUBLIC_API_URL:', process.env.NEXT_PUBLIC_API_URL || 'NOT SET');
+  console.error('   Fix: Set NEXT_PUBLIC_API_URL=https://backend-95ve.onrender.com/api in Vercel');
+  console.error('   Then redeploy your Vercel app');
+}
 
 // Helper function to get Google OAuth URL
 export const getGoogleAuthUrl = (): string => {

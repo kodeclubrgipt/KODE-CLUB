@@ -8,10 +8,9 @@ const nextConfig = {
     domains: [],
   },
   
-  // Environment variables validation
-  env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api',
-  },
+  // Note: NEXT_PUBLIC_* variables are automatically exposed to the browser
+  // No need to manually add them to env object
+  // Just ensure NEXT_PUBLIC_API_URL is set in Vercel environment variables
 };
 
 export default nextConfig;
