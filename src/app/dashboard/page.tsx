@@ -49,14 +49,14 @@ export default function DashboardPage() {
         .slice(0, 2);
 
     return (
-        <div className="container py-10">
-            <div className="mb-8 flex items-center justify-between">
+        <div className="container py-4 sm:py-6 md:py-10 px-4 sm:px-6">
+            <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-                    <p className="text-muted-foreground">Welcome back, {user.name}!</p>
+                    <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Dashboard</h1>
+                    <p className="text-sm sm:text-base text-muted-foreground">Welcome back, {user.name}!</p>
                 </div>
                 <div className="flex items-center gap-4">
-                    <Avatar className="h-10 w-10">
+                    <Avatar className="h-8 w-8 sm:h-10 sm:w-10">
                         <AvatarImage src={user.avatar} alt={user.name} />
                         <AvatarFallback>{initials}</AvatarFallback>
                     </Avatar>
@@ -123,19 +123,19 @@ export default function DashboardPage() {
             </div>
 
             {user.isAdmin && (
-                <Card className="mt-8">
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <Settings className="h-5 w-5" />
+                <Card className="mt-4 sm:mt-6 md:mt-8">
+                    <CardHeader className="pb-3 sm:pb-4">
+                        <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+                            <Settings className="h-4 w-4 sm:h-5 sm:w-5" />
                             Admin Panel
                         </CardTitle>
-                        <CardDescription>
+                        <CardDescription className="text-xs sm:text-sm">
                             Manage users and quizzes
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <Link href="/admin">
-                            <Button>
+                            <Button className="w-full sm:w-auto">
                                 <Settings className="mr-2 h-4 w-4" />
                                 Go to Admin Dashboard
                             </Button>
@@ -144,19 +144,19 @@ export default function DashboardPage() {
                 </Card>
             )}
 
-            <Card className="mt-8">
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                        <FileText className="h-5 w-5" />
+            <Card className="mt-4 sm:mt-6 md:mt-8">
+                <CardHeader className="pb-3 sm:pb-4">
+                    <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+                        <FileText className="h-4 w-4 sm:h-5 sm:w-5" />
                         Quizzes
                     </CardTitle>
-                    <CardDescription>
+                    <CardDescription className="text-xs sm:text-sm">
                         Test your knowledge with quizzes
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Link href="/quiz">
-                        <Button>
+                        <Button className="w-full sm:w-auto">
                             <FileText className="mr-2 h-4 w-4" />
                             View Available Quizzes
                         </Button>
@@ -164,40 +164,40 @@ export default function DashboardPage() {
                 </CardContent>
             </Card>
 
-            <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <Card className="col-span-4">
-                    <CardHeader>
-                        <CardTitle>Recent Activity</CardTitle>
-                        <CardDescription>
+            <div className="mt-4 sm:mt-6 md:mt-8 grid gap-4 grid-cols-1 lg:grid-cols-7">
+                <Card className="lg:col-span-4">
+                    <CardHeader className="pb-3 sm:pb-4">
+                        <CardTitle className="text-lg sm:text-xl">Recent Activity</CardTitle>
+                        <CardDescription className="text-xs sm:text-sm">
                             Your problem solving activity this week.
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div className="h-[200px] flex items-center justify-center text-muted-foreground text-sm border-dashed border-2 rounded-md">
+                        <div className="h-[150px] sm:h-[200px] flex items-center justify-center text-muted-foreground text-xs sm:text-sm border-dashed border-2 rounded-md">
                             Activity Graph Placeholder
                         </div>
                     </CardContent>
                 </Card>
-                <Card className="col-span-3">
-                    <CardHeader>
-                        <CardTitle>Recent Submissions</CardTitle>
-                        <CardDescription>
+                <Card className="lg:col-span-3">
+                    <CardHeader className="pb-3 sm:pb-4">
+                        <CardTitle className="text-lg sm:text-xl">Recent Submissions</CardTitle>
+                        <CardDescription className="text-xs sm:text-sm">
                             Your latest code submissions.
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div className="space-y-4">
+                        <div className="space-y-3 sm:space-y-4">
                             {[
                                 { problem: "Two Sum", status: "Accepted", time: "2 hours ago" },
                                 { problem: "Median of Arrays", status: "Wrong Answer", time: "5 hours ago" },
                                 { problem: "LRU Cache", status: "Accepted", time: "1 day ago" },
                             ].map((sub, i) => (
-                                <div key={i} className="flex items-center justify-between border-b pb-2 last:border-0 last:pb-0">
-                                    <div>
-                                        <p className="font-medium text-sm">{sub.problem}</p>
+                                <div key={i} className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b pb-2 last:border-0 last:pb-0">
+                                    <div className="flex-1">
+                                        <p className="font-medium text-xs sm:text-sm">{sub.problem}</p>
                                         <p className="text-xs text-muted-foreground">{sub.time}</p>
                                     </div>
-                                    <Badge variant={sub.status === "Accepted" ? "default" : "destructive"}>{sub.status}</Badge>
+                                    <Badge variant={sub.status === "Accepted" ? "default" : "destructive"} className="text-xs">{sub.status}</Badge>
                                 </div>
                             ))}
                         </div>

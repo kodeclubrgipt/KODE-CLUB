@@ -5,15 +5,26 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/a
 
 // Helper function to get Google OAuth URL
 export const getGoogleAuthUrl = (): string => {
-  let baseUrl = API_BASE_URL;
+  // Get API base URL from environment variable
+  let apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
   
-  // Remove trailing slash
-  baseUrl = baseUrl.replace(/\/$/, '');
+  // Remove trailing slash if present
+  apiUrl = apiUrl.replace(/\/$/, '');
   
   // Remove /api suffix if present (to avoid double /api/api)
-  baseUrl = baseUrl.replace(/\/api$/, '');
+  // This handles cases where NEXT_PUBLIC_API_URL already includes /api
+  let baseUrl = apiUrl.replace(/\/api$/, '');
   
-  // Construct Google OAuth URL
+  // If we're in production and no env var is set, log warning
+  if (typeof window !== 'undefined' && 
+      window.location.hostname !== 'localhost' && 
+      window.location.hostname !== '127.0.0.1' &&
+      !process.env.NEXT_PUBLIC_API_URL) {
+    console.error('⚠️ NEXT_PUBLIC_API_URL is not set! Please configure it in Vercel environment variables.');
+  }
+  
+  // Construct Google OAuth URL: baseUrl + /api/auth/google
+  // Example: https://backend-95ve.onrender.com/api/auth/google
   return `${baseUrl}/api/auth/google`;
 };
 

@@ -45,7 +45,7 @@ export default function QuizPage() {
 
   if (authLoading || loading) {
     return (
-      <div className="container py-10 flex items-center justify-center min-h-[60vh]">
+      <div className="container py-4 sm:py-6 md:py-10 px-4 sm:px-6 flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
           <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent mx-auto"></div>
           <p className="text-muted-foreground">Loading quizzes...</p>
@@ -59,10 +59,10 @@ export default function QuizPage() {
   }
 
   return (
-    <div className="container py-10">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">Available Quizzes</h1>
-        <p className="text-muted-foreground">Test your knowledge</p>
+    <div className="container py-4 sm:py-6 md:py-10 px-4 sm:px-6">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Available Quizzes</h1>
+        <p className="text-sm sm:text-base text-muted-foreground">Test your knowledge</p>
       </div>
 
       {quizzes.length === 0 ? (
