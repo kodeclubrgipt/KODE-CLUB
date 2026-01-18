@@ -113,15 +113,31 @@ class ApiClient {
         headers,
       });
 
-      const data = await response.json();
+      // Check if response is JSON
+      const contentType = response.headers.get('content-type');
+      let data;
+      
+      if (contentType && contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        throw new Error(`Invalid response format: ${text.substring(0, 100)}`);
+      }
 
       if (!response.ok) {
-        throw new Error(data.message || 'Request failed');
+        const errorMessage = data.message || data.error || `Request failed with status ${response.status}`;
+        console.error(`API Error [${response.status}]:`, errorMessage, data);
+        throw new Error(errorMessage);
       }
 
       return data;
     } catch (error: any) {
-      throw new Error(error.message || 'Network error');
+      // Enhanced error logging
+      if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+        console.error('Network error - Check if backend is running and CORS is configured:', this.baseURL);
+        throw new Error('Cannot connect to server. Please check your internet connection and try again.');
+      }
+      throw error;
     }
   }
 
