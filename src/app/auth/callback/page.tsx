@@ -14,6 +14,13 @@ function AuthCallbackContent() {
 
     useEffect(() => {
         const token = searchParams.get('token');
+        const error = searchParams.get('error');
+        
+        // If there's an error parameter, redirect to login with error
+        if (error) {
+            router.push(`/login?error=${error}`);
+            return;
+        }
         
         if (token) {
             localStorage.setItem('token', token);
@@ -23,16 +30,18 @@ function AuthCallbackContent() {
                 .then((response) => {
                     if (response.success && response.user) {
                         updateUser(response.user);
-                        router.push('/dashboard');
+                        // Use replace instead of push to prevent back navigation issues
+                        router.replace('/dashboard');
                     } else {
-                        router.push('/login?error=authentication_failed');
+                        router.replace('/login?error=authentication_failed');
                     }
                 })
-                .catch(() => {
-                    router.push('/login?error=authentication_failed');
+                .catch((err) => {
+                    console.error('Auth callback error:', err);
+                    router.replace('/login?error=authentication_failed');
                 });
         } else {
-            router.push('/login?error=no_token');
+            router.replace('/login?error=no_token');
         }
     }, [searchParams, router, updateUser]);
 
