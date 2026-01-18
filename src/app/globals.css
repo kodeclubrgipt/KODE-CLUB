@@ -26,7 +26,7 @@
 
 body {
   color: rgb(var(--foreground));
-  background: rgb(var(--background));
+  background: transparent;
 }
 
 @layer utilities {
