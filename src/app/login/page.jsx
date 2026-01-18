@@ -30,6 +30,13 @@ function LoginForm() {
     const handleGoogleAuth = () => {
         // Use the helper function to get correct Google OAuth URL
         const googleAuthUrl = getGoogleAuthUrl();
+
+        if (!googleAuthUrl) {
+            console.error("Google Auth URL is missing. NEXT_PUBLIC_API_URL is likely not set.");
+            setError("Configuration Error: API URL is not set. Please check site configuration.");
+            return;
+        }
+
         window.location.href = googleAuthUrl;
     };
 

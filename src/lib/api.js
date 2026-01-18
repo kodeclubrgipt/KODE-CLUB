@@ -69,7 +69,10 @@ class ApiClient {
     this.baseURL = baseURL;
     // Log API URL in development or if using localhost
     if (typeof window !== 'undefined') {
-      if (baseURL && baseURL.includes('localhost') && window.location.hostname !== 'localhost') {
+      if (!baseURL) {
+        console.error('⚠️ API Client initialized without a Base URL!');
+        console.error('NEXT_PUBLIC_API_URL is missing. API calls will fail.');
+      } else if (baseURL.includes('localhost') && window.location.hostname !== 'localhost') {
         console.error('⚠️ API Client is using localhost URL in production!');
         console.error('Current API URL:', baseURL);
         console.error('Please set NEXT_PUBLIC_API_URL=https://backend-95ve.onrender.com/api in Vercel');
