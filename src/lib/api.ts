@@ -90,6 +90,16 @@ class ApiClient {
 
   constructor(baseURL: string) {
     this.baseURL = baseURL;
+    // Log API URL in development or if using localhost
+    if (typeof window !== 'undefined') {
+      if (baseURL.includes('localhost') && window.location.hostname !== 'localhost') {
+        console.error('⚠️ API Client is using localhost URL in production!');
+        console.error('Current API URL:', baseURL);
+        console.error('Please set NEXT_PUBLIC_API_URL=https://backend-95ve.onrender.com/api in Vercel');
+      } else {
+        console.log('✅ API Client initialized with URL:', baseURL);
+      }
+    }
   }
 
   private async request<T>(
@@ -108,10 +118,15 @@ class ApiClient {
     }
 
     try {
-      const response = await fetch(`${this.baseURL}${endpoint}`, {
+      const fullUrl = `${this.baseURL}${endpoint}`;
+      console.log(`API Request: ${options.method || 'GET'} ${fullUrl}`);
+      
+      const response = await fetch(fullUrl, {
         ...options,
         headers,
       });
+
+      console.log(`API Response: ${response.status} ${response.statusText}`);
 
       // Check if response is JSON
       const contentType = response.headers.get('content-type');
@@ -121,6 +136,7 @@ class ApiClient {
         data = await response.json();
       } else {
         const text = await response.text();
+        console.error('Non-JSON response:', text.substring(0, 200));
         throw new Error(`Invalid response format: ${text.substring(0, 100)}`);
       }
 
@@ -134,9 +150,12 @@ class ApiClient {
     } catch (error: any) {
       // Enhanced error logging
       if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-        console.error('Network error - Check if backend is running and CORS is configured:', this.baseURL);
+        console.error('Network error - Check if backend is running and CORS is configured');
+        console.error('API Base URL:', this.baseURL);
+        console.error('Full error:', error);
         throw new Error('Cannot connect to server. Please check your internet connection and try again.');
       }
+      console.error('API Request Error:', error);
       throw error;
     }
   }

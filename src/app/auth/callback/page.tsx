@@ -18,29 +18,46 @@ function AuthCallbackContent() {
         
         // If there's an error parameter, redirect to login with error
         if (error) {
-            router.push(`/login?error=${error}`);
+            console.error('OAuth error:', error);
+            router.replace(`/login?error=${error}`);
             return;
         }
         
         if (token) {
+            console.log('Token received, storing and verifying...');
             localStorage.setItem('token', token);
+            
+            // Check if API URL is configured
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+            if (!apiUrl || apiUrl.includes('localhost')) {
+                console.error('⚠️ NEXT_PUBLIC_API_URL is not set or using localhost!');
+                console.error('Please set NEXT_PUBLIC_API_URL=https://backend-95ve.onrender.com/api in Vercel');
+            }
             
             // Fetch user data and update context
             apiClient.getCurrentUser()
                 .then((response) => {
+                    console.log('User data fetched:', response);
                     if (response.success && response.user) {
                         updateUser(response.user);
+                        console.log('Authentication successful, redirecting to dashboard');
                         // Use replace instead of push to prevent back navigation issues
                         router.replace('/dashboard');
                     } else {
+                        console.error('Invalid response:', response);
                         router.replace('/login?error=authentication_failed');
                     }
                 })
                 .catch((err) => {
                     console.error('Auth callback error:', err);
+                    console.error('Error details:', {
+                        message: err.message,
+                        apiUrl: process.env.NEXT_PUBLIC_API_URL || 'NOT SET',
+                    });
                     router.replace('/login?error=authentication_failed');
                 });
         } else {
+            console.error('No token in callback URL');
             router.replace('/login?error=no_token');
         }
     }, [searchParams, router, updateUser]);
