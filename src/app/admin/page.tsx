@@ -66,7 +66,7 @@ export default function AdminPage() {
     try {
       const res = await apiClient.deleteQuiz(quizId);
       if (res.success) {
-        setQuizzes(quizzes.filter(q => q.id !== quizId));
+        setQuizzes(quizzes.filter(q => (q.id || q._id) !== quizId));
       }
     } catch (error) {
       alert('Failed to delete quiz');
@@ -77,7 +77,7 @@ export default function AdminPage() {
     try {
       const res = await apiClient.toggleQuizStatus(quizId);
       if (res.success && res.quiz) {
-        setQuizzes(quizzes.map(q => q.id === quizId ? res.quiz! : q));
+        setQuizzes(quizzes.map(q => (q.id || q._id) === quizId ? res.quiz! : q));
       }
     } catch (error) {
       alert('Failed to toggle quiz status');
@@ -316,7 +316,7 @@ export default function AdminPage() {
             <CardContent>
               <div className="space-y-4">
                 {quizzes.map((quiz) => (
-                  <Card key={quiz.id}>
+                  <Card key={quiz.id || quiz._id || Math.random().toString()}>
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <div>
@@ -333,14 +333,20 @@ export default function AdminPage() {
                           <Button
                             variant={quiz.isActive ? 'default' : 'outline'}
                             size="sm"
-                            onClick={() => handleToggleQuiz(quiz.id)}
+                            onClick={() => {
+                              const quizId = quiz.id || quiz._id;
+                              if (quizId) handleToggleQuiz(quizId);
+                            }}
                           >
                             {quiz.isActive ? 'Active' : 'Inactive'}
                           </Button>
                           <Button
                             variant="destructive"
                             size="sm"
-                            onClick={() => handleDeleteQuiz(quiz.id)}
+                            onClick={() => {
+                              const quizId = quiz.id || quiz._id;
+                              if (quizId) handleDeleteQuiz(quizId);
+                            }}
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>

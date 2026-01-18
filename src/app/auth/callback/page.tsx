@@ -1,11 +1,13 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { apiClient } from '@/lib/api';
 
-export default function AuthCallbackPage() {
+export const dynamic = 'force-dynamic';
+
+function AuthCallbackContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const { updateUser } = useAuth();
@@ -41,5 +43,13 @@ export default function AuthCallbackPage() {
                 <p className="text-muted-foreground">Completing authentication...</p>
             </div>
         </div>
+    );
+}
+
+export default function AuthCallbackPage() {
+    return (
+        <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+            <AuthCallbackContent />
+        </Suspense>
     );
 }
