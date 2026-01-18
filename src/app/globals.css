@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 255 255 255;
+  /* White (RGB) */
+  --foreground: 23 23 23;
+  /* Zinc 900 */
+  --primary: 37 99 235;
+  /* Blue 600 */
+  --primary-foreground: 255 255 255;
+  --radius: 0.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: 10 10 10;
+    /* Zinc 950 */
+    --foreground: 250 250 250;
+    /* Zinc 50 */
+    --primary: 59 130 246;
+    /* Blue 500 */
+  }
+}
+
+body {
+  color: rgb(var(--foreground));
+  background: rgb(var(--background));
+}
+
+@layer utilities {
+  .tracking-incredibly-tight {
+    letter-spacing: -0.05em;
+  }
+}
