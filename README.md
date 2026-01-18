@@ -33,34 +33,12 @@ The official coding platform for RGIPT students. Designed for growth, performanc
    npm install
    ```
 
-3. **Set up environment variables**
-   ```bash
-   # Copy the example file
-   cp env.example .env.local
-   
-   # Edit .env.local and set your backend API URL
-   # For local development: NEXT_PUBLIC_API_URL=http://localhost:5000/api
-   # For production: NEXT_PUBLIC_API_URL=https://your-backend-service.onrender.com/api
-   ```
-
-4. **Run the development server**
+3. **Run the development server**
    ```bash
    npm run dev
    ```
 
-5. **Open [http://localhost:3000](http://localhost:3000)**
-
-   **Note**: Make sure your backend is running on `http://localhost:5000` for local development.
-
-## 📝 Environment Variables
-
-The frontend requires the following environment variable:
-
-- `NEXT_PUBLIC_API_URL`: Backend API base URL (must include `/api` suffix)
-  - Local: `http://localhost:5000/api`
-  - Production: `https://your-backend-service.onrender.com/api`
-
-See [ENV_SETUP.md](./ENV_SETUP.md) for detailed setup instructions.
+4. **Open [http://localhost:3000](http://localhost:3000)**
 
 ## 🤝 Contributing
 

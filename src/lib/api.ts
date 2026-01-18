@@ -1,4 +1,21 @@
+// Get API base URL from environment variable
+// IMPORTANT: In production (Vercel), you MUST set NEXT_PUBLIC_API_URL
+// Example: https://backend-95ve.onrender.com/api
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+
+// Helper function to get Google OAuth URL
+export const getGoogleAuthUrl = (): string => {
+  let baseUrl = API_BASE_URL;
+  
+  // Remove trailing slash
+  baseUrl = baseUrl.replace(/\/$/, '');
+  
+  // Remove /api suffix if present (to avoid double /api/api)
+  baseUrl = baseUrl.replace(/\/api$/, '');
+  
+  // Construct Google OAuth URL
+  return `${baseUrl}/api/auth/google`;
+};
 
 export interface ApiResponse<T> {
   success: boolean;
