@@ -184,8 +184,8 @@ export function Footer() {
 
                 {/* Bottom Bar with Copyright */}
                 <div className="mt-12 pt-8 border-t border-white/10 flex flex-col items-center gap-6">
-                    {/* Floating Dock - Centered above copyright */}
-                    <div className="flex items-center gap-3 p-3 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10">
+                    {/* Floating Dock - Centered above copyright (Hidden on mobile to prevent overflow) */}
+                    <div className="hidden md:flex items-center gap-3 p-3 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10">
                         {dockItems.map((item) => (
                             <DockItem key={item.label} {...item} />
                         ))}
