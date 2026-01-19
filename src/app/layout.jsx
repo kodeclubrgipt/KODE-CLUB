@@ -7,6 +7,7 @@ import { GlobalVideoBackground } from "@/components/layout/GlobalVideoBackground
 import { cn } from "@/lib/utils.js";
 import { SmoothScroll } from "@/components/motion/smooth-scroll";
 import { CommandBar } from "@/components/features/navigation/CommandBar";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,6 +33,7 @@ export default function RootLayout({ children }) {
                             <main className="flex-1 pt-16">{children}</main>
                             <Footer />
                             <CommandBar />
+                            <Toaster />
                         </div>
                     </SmoothScroll>
                 </Providers>

@@ -207,7 +207,7 @@ class ApiClient {
   }
 
   async toggleQuizStatus(quizId) {
-    const res = await this.request(`/admin/quizzes/${quizId}/toggle-status`, {
+    const res = await this.request(`/admin/quizzes/${quizId}/toggle`, {
       method: 'PATCH',
     });
     return { ...res, quiz: res.quiz };

@@ -7,8 +7,24 @@
 const LANGUAGE_MAP = {
     python: 'python',
     javascript: 'javascript',
+    typescript: 'typescript',
     cpp: 'cpp',
+    c: 'c',
     java: 'java',
+    go: 'go',
+    rust: 'rust',
+    ruby: 'ruby',
+    php: 'php',
+    swift: 'swift',
+    kotlin: 'kotlin',
+    csharp: 'csharp',
+    bash: 'bash',
+    lua: 'lua',
+    perl: 'perl',
+    r: 'r',
+    scala: 'scala',
+    haskell: 'haskell',
+    dart: 'dart',
 };
 
 // Piston API endpoint
@@ -16,7 +32,7 @@ const PISTON_API_URL = 'https://emkc.org/api/v2/piston/execute';
 
 /**
  * Execute code using Piston API
- * @param {string} language - Language name (python, javascript, cpp, java)
+ * @param {string} language - Language name
  * @param {string} code - Code to execute
  * @param {string} stdin - Standard input (optional)
  * @returns {Promise<{success: boolean, output?: string, error?: string, time?: number}>}
@@ -24,7 +40,7 @@ const PISTON_API_URL = 'https://emkc.org/api/v2/piston/execute';
 export async function executeCode(language, code, stdin = '') {
     try {
         const pistonLanguage = LANGUAGE_MAP[language.toLowerCase()];
-        
+
         if (!pistonLanguage) {
             return {
                 success: false,
@@ -56,10 +72,7 @@ export async function executeCode(language, code, stdin = '') {
 
         const data = await response.json();
 
-        // Piston API response structure - EMKC format
-        // Response can have both 'compile' and 'run' objects
-        
-        // Check for compilation errors first (for compiled languages like C++, Java)
+        // Check for compilation errors first (for compiled languages)
         if (data.compile && data.compile.code !== 0) {
             return {
                 success: false,
@@ -68,11 +81,11 @@ export async function executeCode(language, code, stdin = '') {
                 time: data.compile.time || 0
             };
         }
-        
+
         // Check runtime execution
         if (data.run) {
             const run = data.run;
-            
+
             // Check if there was a runtime error (non-zero exit code)
             if (run.code !== 0) {
                 return {
@@ -91,7 +104,7 @@ export async function executeCode(language, code, stdin = '') {
                 time: run.time || 0
             };
         }
-        
+
         return {
             success: false,
             error: 'Unexpected response format from Piston API'
@@ -112,7 +125,7 @@ export async function executeCode(language, code, stdin = '') {
 export async function getAvailableLanguages() {
     try {
         const response = await fetch('https://emkc.org/api/v2/piston/runtimes');
-        
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }

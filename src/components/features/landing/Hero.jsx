@@ -151,7 +151,7 @@ export function Hero() {
                 <div className="absolute top-1/2 left-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/5 blur-[100px]" />
             </div>
 
-            <div className="container relative z-10">
+            <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10">
                 {/* Top Badge */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -176,10 +176,10 @@ export function Hero() {
                         transition={{ delay: 0.1 }}
                         className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-4"
                     >
-                        <span className="text-neutral-200">Master Coding</span>{" "}
+                        <span className="text-white">Master Coding</span>{" "}
                         <br />
-                        <span className="text-neutral-200">with </span>
-                        <span className="bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-500 bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]">
+                        <span className="text-white">with </span>
+                        <span className="text-white">
                             Kode Club
                         </span>
                     </motion.h1>

@@ -36,26 +36,17 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const login = async (email, password) => {
-    const response = await apiClient.login(email, password);
-    if (response.success && response.token && response.user) {
-      localStorage.setItem('token', response.token);
-      setUser(response.user);
-      router.push('/dashboard');
-    } else {
-      throw new Error(response.message || 'Login failed');
+  const refreshUser = async () => {
+    try {
+      const response = await apiClient.getCurrentUser();
+      if (response.success && response.user) {
+        setUser(response.user);
+        return response.user;
+      }
+    } catch (error) {
+      console.error('Failed to refresh user:', error);
     }
-  };
-
-  const register = async (email, password, name) => {
-    const response = await apiClient.register(email, password, name);
-    if (response.success && response.token && response.user) {
-      localStorage.setItem('token', response.token);
-      setUser(response.user);
-      router.push('/dashboard');
-    } else {
-      throw new Error(response.message || 'Registration failed');
-    }
+    return null;
   };
 
   const logout = () => {
@@ -68,8 +59,21 @@ export function AuthProvider({ children }) {
     setUser(updatedUser);
   };
 
+  // Get display name (username preferred, fallback to name)
+  const getDisplayName = () => {
+    if (!user) return '';
+    return user.username || user.name || '';
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, updateUser }}>
+    <AuthContext.Provider value={{
+      user,
+      loading,
+      logout,
+      updateUser,
+      refreshUser,
+      getDisplayName
+    }}>
       {children}
     </AuthContext.Provider>
   );

@@ -17,12 +17,14 @@ export function GlobalVideoBackground() {
                     height: 'auto',
                 }}
             >
-                <source 
-                    src="https://res.cloudinary.com/dzt9fr0cw/video/upload/v1768652790/original-e10daf1419f90a8b1787ae43f95d3c36_zrmdok.mp4" 
-                    type="video/mp4" 
+                <source
+                    src="https://res.cloudinary.com/dzt9fr0cw/video/upload/v1768652790/original-e10daf1419f90a8b1787ae43f95d3c36_zrmdok.mp4"
+                    type="video/mp4"
                 />
                 Your browser does not support the video tag.
             </video>
+            {/* Dark Overlay */}
+            <div className="absolute inset-0 bg-black/60" />
         </div>
     );
 }

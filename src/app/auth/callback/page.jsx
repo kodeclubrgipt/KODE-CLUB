@@ -15,58 +15,46 @@ function AuthCallbackContent() {
     useEffect(() => {
         const token = searchParams.get('token');
         const error = searchParams.get('error');
-        
-        // If there's an error parameter, redirect to login with error
+        const needsSetup = searchParams.get('setup') === 'true';
+
         if (error) {
-            console.error('OAuth error:', error);
             router.replace(`/login?error=${error}`);
             return;
         }
-        
+
         if (token) {
-            console.log('Token received, storing and verifying...');
             localStorage.setItem('token', token);
-            
-            // Check if API URL is configured
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-            if (!apiUrl || apiUrl.includes('localhost')) {
-                console.error('⚠️ NEXT_PUBLIC_API_URL is not set or using localhost!');
-                console.error('Please set NEXT_PUBLIC_API_URL=https://backend-95ve.onrender.com/api in Vercel');
-            }
-            
-            // Fetch user data and update context
+
+            // Fetch user data
             apiClient.getCurrentUser()
                 .then((response) => {
-                    console.log('User data fetched:', response);
                     if (response.success && response.user) {
                         updateUser(response.user);
-                        console.log('Authentication successful, redirecting to dashboard');
-                        // Use replace instead of push to prevent back navigation issues
-                        router.replace('/dashboard');
+
+                        // Check if profile setup is needed
+                        if (needsSetup || !response.user.profileComplete || !response.user.username) {
+                            router.replace('/setup-profile');
+                        } else {
+                            router.replace('/dashboard');
+                        }
                     } else {
-                        console.error('Invalid response:', response);
                         router.replace('/login?error=authentication_failed');
                     }
                 })
                 .catch((err) => {
                     console.error('Auth callback error:', err);
-                    console.error('Error details:', {
-                        message: err.message,
-                        apiUrl: process.env.NEXT_PUBLIC_API_URL || 'NOT SET',
-                    });
                     router.replace('/login?error=authentication_failed');
                 });
         } else {
-            console.error('No token in callback URL');
             router.replace('/login?error=no_token');
         }
     }, [searchParams, router, updateUser]);
 
     return (
-        <div className="flex h-screen items-center justify-center">
+        <div className="min-h-screen flex items-center justify-center">
             <div className="text-center">
-                <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent mx-auto"></div>
-                <p className="text-muted-foreground">Completing authentication...</p>
+                <div className="w-12 h-12 rounded-full border-4 border-purple-500 border-t-transparent animate-spin mx-auto mb-4" />
+                <p className="text-white/50">Completing authentication...</p>
             </div>
         </div>
     );
@@ -74,7 +62,11 @@ function AuthCallbackContent() {
 
 export default function AuthCallbackPage() {
     return (
-        <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading...</div>}>
+        <Suspense fallback={
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="w-12 h-12 rounded-full border-4 border-purple-500 border-t-transparent animate-spin" />
+            </div>
+        }>
             <AuthCallbackContent />
         </Suspense>
     );
